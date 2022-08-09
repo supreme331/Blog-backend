@@ -29,6 +29,7 @@ export const getAll = async (req, res) => {
         })
     }
 }
+
 export const getOne = async (req, res) => {
     try {
         const postId = req.params.id
@@ -51,7 +52,7 @@ export const getOne = async (req, res) => {
                 })
             }
             res.json(doc)
-        })
+        }).populate('user')
     }
     catch (err) {
         console.log(err)
@@ -60,6 +61,7 @@ export const getOne = async (req, res) => {
         })
     }
 }
+
 export const remove = async (req, res) => {
     try {
         const postId = req.params.id
@@ -95,8 +97,8 @@ export const create = async (req, res) => {
         const doc = new PostModel({
             title: req.body.title,
             text: req.body.text,
-            imageURL: req.body.imageURL,
-            tags: req.body.tags,
+            imageUrl: req.body.imageUrl,
+            tags: req.body.tags.split(','),
             user: req.userId
         })
 
@@ -120,8 +122,8 @@ export const update = async (req, res) => {
         },{
             title: req.body.title,
             text: req.body.text,
-            imageURL: req.body.imageURL,
-            tags: req.body.tags,
+            imageUrl: req.body.imageUrl,
+            tags: req.body.tags.split(','),
             user: req.userId
         })
         res.json({
