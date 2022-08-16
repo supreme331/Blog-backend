@@ -1,4 +1,3 @@
-import {validationResult} from "express-validator";
 import bcrypt from "bcrypt";
 import UserModel from "../models/User.js";
 import jwt from "jsonwebtoken";
@@ -90,6 +89,40 @@ export const authMe = async (req, res) => {
         console.log(err)
         res.status(500).json({
             message: 'Нет доступа'
+        })
+    }
+}
+
+export const getOne = async (req, res) => {
+    try {
+        const userId = req.params.id
+        const user = await UserModel.findById(userId)
+
+        if (!user) {
+            return res.status(404).json({
+                message: 'Пользователь не найден'
+            })
+        }
+
+        res.json(user)
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message: 'Нет доступа'
+        })
+    }
+}
+
+export const getAll = async (req, res) => {
+    try {
+        const users = await UserModel.find().exec()
+
+        res.json(users)
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message: 'Не удалось получить пользователей'
         })
     }
 }

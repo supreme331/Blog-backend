@@ -61,7 +61,6 @@ export const remove = async (req, res) => {
 
 export const create = async (req, res) => {
     try {
-        const postId = req.params.id
         const doc = new CommentModel({
             user: req.userId,
             postId: req.body.postId,
@@ -83,12 +82,11 @@ export const create = async (req, res) => {
 export const update = async (req, res) => {
     try {
         const commentId = req.params.id
-        // const postId = req.params.id
         await CommentModel.updateOne({
             _id: commentId
         },{
             user: req.userId,
-            postId: req.body.postId,
+            // postId: req.body.postId,
             text: req.body.text,
         })
         res.json({

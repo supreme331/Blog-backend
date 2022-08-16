@@ -6,7 +6,7 @@ import {commentCreateValidation, loginValidation, postCreateValidation, register
 import {checkAuth, handleValidationErrors} from './utils/index.js'
 import {UserController, PostController, CommentController} from './controllers/index.js'
 
-mongoose.connect('mongodb+srv://admin:qqqqqq@cluster0.nzksxgp.mongodb.net/blog?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('DB OK'))
     .catch((err) => console.log('DB error', err))
 
@@ -30,6 +30,8 @@ app.use('/uploads', express.static('uploads'))
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login)
 app.post('/auth/register', registerValidation, handleValidationErrors, UserController.register)
 app.get('/auth/me', checkAuth, UserController.authMe)
+app.get('/users/:id', UserController.getOne)
+app.get('/users/', UserController.getAll)
 
 app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
     res.json({
@@ -51,7 +53,7 @@ app.post('/comments', checkAuth, commentCreateValidation, handleValidationErrors
 app.patch('/comments/:id', checkAuth, commentCreateValidation, handleValidationErrors, CommentController.update)
 app.delete('/comments/:id', checkAuth, CommentController.remove)
 
-app.listen(4444, (err) => {
+app.listen(process.env.PORT || 4444, (err) => {
     if (err) {
         return console.log(err)
     }

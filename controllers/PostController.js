@@ -4,7 +4,7 @@ export const getLastTags = async (req, res) => {
     try {
         const posts = await PostModel.find().limit(5).exec()
 
-        const tags = posts.map(obj => obj.tags).flat().slice(0, 5)
+        const tags = posts.map(obj => obj.tags).flat()
 
         res.json(tags)
     }
@@ -98,7 +98,7 @@ export const create = async (req, res) => {
             title: req.body.title,
             text: req.body.text,
             imageUrl: req.body.imageUrl,
-            tags: req.body.tags.split(','),
+            tags: req.body.tags.split(', '),
             user: req.userId
         })
 
