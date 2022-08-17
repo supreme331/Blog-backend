@@ -5,8 +5,9 @@ import cors from 'cors'
 import {commentCreateValidation, loginValidation, postCreateValidation, registerValidation} from "./validations.js"
 import {checkAuth, handleValidationErrors} from './utils/index.js'
 import {UserController, PostController, CommentController} from './controllers/index.js'
+import {userUpdate} from "./controllers/UserController.js";
 
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI || "mongodb+srv://admin:qqqqqq@cluster0.nzksxgp.mongodb.net/blog?retryWrites=true&w=majority")
     .then(() => console.log('DB OK'))
     .catch((err) => console.log('DB error', err))
 
@@ -32,6 +33,7 @@ app.post('/auth/register', registerValidation, handleValidationErrors, UserContr
 app.get('/auth/me', checkAuth, UserController.authMe)
 app.get('/users/:id', UserController.getOne)
 app.get('/users/', UserController.getAll)
+app.patch('/users/:id', registerValidation, handleValidationErrors, UserController.userUpdate)
 
 app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
     res.json({
